@@ -150,87 +150,96 @@ Public Class Frm_IndoramaPrt
         Try
             indata = sp.ReadExisting()
             InAllData += indata
-            ComWriteLog("すぐ！" & InAllData, "test.log")
 
             DataLen = InAllData.Length
 
-            ' ETXフラグがたっていたら
-            If InAllData.Substring(0, 1) <> STX Then
-                ComWriteLog("STXではない時：" & InAllData, "..\file.log")
-                InAllData = ""
-                Exit Sub
+            '受信完了チェック
+            If IsReceveComp(DataLen) Then
+                '   イベント止める
+                RemoveHandler SeriPort.DataReceived, AddressOf SerialPort_DataReceived
+                '''''
+                If Strings.Right(InAllData, 1) = ETX And Strings.Left(InAllData, 1) <> STX Then
+                    InAllData = ""
+                Else
+                    '　　重量取得チェック
+                    If IsGetJyuryo(DataLen) Then
+
+                        ComWriteLog(InAllData, "重量取得直前データ.log")
+
+                        Dim Bunbo As Integer = 0
+                        Dim Juryo As String = InAllData.Substring(15, 6)
+                        Dim Fugou As String = InAllData.Substring(21, 1)
+                        Dim sisu As String = InAllData.Substring(22, 1)
+
+                        If Fugou = "0" Then
+                            Bunbo = 1000
+                        ElseIf Fugou = "F" Then
+                            Bunbo = 1
+                        End If
+                        '
+                        If sisu <> 0 Then
+                            Bunbo = Bunbo * (10 ^ sisu)
+                        End If
+
+                        Jyuryo = Val(Juryo) / Bunbo
+                        Jyuryo = Fix(Jyuryo)
+
+                    End If
+
+                    'データバッファクリア
+                    InAllData = ""
+                End If
+            Else
+
+
             End If
-
-            If Strings.Right(InAllData, 1) = ENQ Then
-                InAllData = indata
-            End If
-
-            If Strings.Right(InAllData, 1) = ACK Then
-                InAllData = indata
-            End If
-
-            If Strings.Right(InAllData, 1) = NAK Then
-                InAllData = indata
-            End If
-
-            If Strings.Right(InAllData, 1) = EOT Then
-                InAllData = indata
-            End If
-
-            If Strings.Right(InAllData, 1) = ETX Then
-                ComWriteLog(Strings.Right(InAllData, 1) & "Strings.Right(InAllData, 1) = ETX", "test.log")
-                InAllData = ""
-                Exit Sub
-            End If
-
-
-            ComWriteLog("あと！" & InAllData, "test.log")
-
-            ComWriteLog(DataLen, "変数確認.log")
-            If DataLen <> 31 And DataLen <> 32 Then
-                ComWriteLog(DataLen & " " & "Not (DataLen = 32 And DataLen = 33)", "変数確認.log")
-                Exit Sub
-            End If
-
-            'ComWriteLog(InAllData, "変数確認.log")
-            'ComWriteLog(InAllData.Substring(5, 1) & " " & InAllData.Substring(5, 1), "変数確認.log")
-            'If InAllData.Substring(5, 1) <> 6 And InAllData.Substring(5, 1) <> 4 Then
-            '    ComWriteLog("Not (InAllData.Substring(6, 1) = 6 And InAllData.Substring(6, 1) = 4)", "変数確認.log")
-            '    Exit Sub
-            'End If
-
-            ComWriteLog(InAllData.Substring(6, 1) & " " & InAllData.Substring(6, 1), "変数確認.log")
-            If InAllData.Substring(6, 1) <> 0 Then
-                ComWriteLog("Not InAllData.Substring(7, 1) = 0", "変数確認.log")
-                Exit Sub
-            End If
-
-
-
-            Dim Bunbo As Integer = 0
-            Dim Juryo As String = InAllData.Substring(15, 6)
-            Dim Fugou As String = InAllData.Substring(21, 1)
-            Dim sisu As String = InAllData.Substring(22, 1)
-
-            If Fugou = "0" Then
-                Bunbo = 1000
-            ElseIf Fugou = "F" Then
-                Bunbo = 1
-            End If
-            '
-            If sisu <> 0 Then
-                Bunbo = Bunbo * (10 ^ sisu)
-            End If
-
-            Jyuryo = Val(Juryo) / Bunbo
-            Jyuryo = Fix(Jyuryo)
-
 
         Catch ex As Exception
             ComWriteErrLog(ex)
+        Finally
+            '   イベント止める
+            RemoveHandler SeriPort.DataReceived, AddressOf SerialPort_DataReceived
+            '   イベント再開
+            AddHandler SeriPort.DataReceived, AddressOf SerialPort_DataReceived
+
         End Try
 
     End Sub
+
+    ''' <summary>
+    ''' 受信完了チェック
+    ''' <param name="prmDataLen">データ長</param>
+    ''' </summary>
+
+    Private Function IsReceveComp(prmDataLen As Integer) As Boolean
+        Dim rtn As Boolean = True
+
+        If prmDataLen > 0 Then
+            ' ETXフラグがたっていたら
+            rtn = InAllData.Substring(0, 1) <> STX _
+                OrElse Strings.Right(InAllData, 1) = ENQ _
+                OrElse Strings.Right(InAllData, 1) = ENQ _
+                OrElse Strings.Right(InAllData, 1) = ACK _
+                OrElse Strings.Right(InAllData, 1) = NAK _
+                OrElse Strings.Right(InAllData, 1) = EOT _
+                OrElse (prmDataLen > 1 And Strings.Right(InAllData, 1) = ETX)
+
+        End If
+
+        Return rtn
+
+    End Function
+
+    ''' <summary>   
+    ''' 重量取得チェック
+    ''' <param name="prmDataLen">データ長</param>
+    ''' </summary>
+    Private Function IsGetJyuryo(prmDataLen As Integer) As Boolean
+        Return (prmDataLen = 31 Or prmDataLen = 32) _
+            AndAlso (InAllData.Substring(5, 1) = 0 Or InAllData.Substring(5, 1) = 4) _
+            AndAlso InAllData.Substring(6, 1) = 0
+
+    End Function
 
     Private Sub RdoAuto_CheckedChanged(sender As Object, e As EventArgs) Handles RdoAuto.CheckedChanged, RdoManual.CheckedChanged
         Try
