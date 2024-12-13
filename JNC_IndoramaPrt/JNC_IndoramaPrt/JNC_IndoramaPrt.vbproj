@@ -71,7 +71,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\Debug\</OutputPath>
+    <OutputPath>C:\JNC\EXE\</OutputPath>
     <DocumentationFile>
     </DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
@@ -93,11 +93,11 @@
   <ItemGroup>
     <Reference Include="ClsPrintingProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Release\ClsPrintingProcess.dll</HintPath>
+      <HintPath>C:\JNC\EXE\ClsPrintingProcess.dll</HintPath>
     </Reference>
     <Reference Include="Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Release\Common.dll</HintPath>
+      <HintPath>C:\JNC\EXE\Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -124,11 +124,10 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Frm_IndoramaPrt.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Frm_IndoramaPrt.Designer.vb">
       <DependentUpon>Frm_IndoramaPrt.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Frm_IndoramaPrt.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />

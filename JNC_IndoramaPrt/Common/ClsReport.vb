@@ -35,7 +35,7 @@ Public Class ClsReport
       Me.Provider = TypProvider.Accdb
 
     Catch ex As Exception
-      Call ComWriteErrLog(ex)
+      Call ComWriteErrLog(ex,false)
       Throw New Exception("レポート出力用Accessファイルの初期化に失敗しました。")
     End Try
 

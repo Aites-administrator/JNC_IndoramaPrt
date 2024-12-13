@@ -2,8 +2,6 @@
 Imports Common.ClsFunction
 
 Public Class ClsPrintingProcess
-    ' ワークテーブル名
-    Private Const WK_TBL As String = "T_SAMPLE"
 
     ' １つ目のプロセスＩＤ
     Private Shared ryoProcesID_01 As System.Diagnostics.Process
@@ -169,7 +167,7 @@ Public Class ClsPrintingProcess
 
     End Function
 
-    Public Shared Sub PrintProcess(prmPreview As Integer, prmInsData As Dictionary(Of String, String), Optional ByRef prmDenpyoNo As String = "", Optional ByRef prmNohinPRTFlg As Integer = 0)
+    Public Shared Sub PrintProcess(prmWkTbl As String, prmReportName As String, prmPreview As Integer, prmInsData As Dictionary(Of String, String), Optional ByRef prmDenpyoNo As String = "", Optional ByRef prmNohinPRTFlg As Integer = 0)
         Dim tmpDt As New DataTable
         Try
 
@@ -185,10 +183,10 @@ Public Class ClsPrintingProcess
 
 
             'ワークテーブル作成
-            UpdateReportNohinSet(tmpDt, SqlInsert(WK_TBL, prmInsData))
+            UpdateReportNohinSet(tmpDt, prmWkTbl, SqlInsert(prmWkTbl, prmInsData))
 
             '印刷処理
-            AccessRun(prmPreview, "R_SAMPLE", True)
+            AccessRun(prmPreview, prmReportName, True)
 
             'For Each tmpRow As DataRow In tmpDt.Rows
             '  SqlServer.Execute(SqlUpdPrintFlg(tmpRow))
@@ -206,7 +204,7 @@ Public Class ClsPrintingProcess
     '''  True   -   成功
     '''  False  -   失敗
     ''' </returns>
-    Private Shared Function UpdateReportNohinSet(prmDt As DataTable, prmSql As String) As Boolean
+    Private Shared Function UpdateReportNohinSet(prmDt As DataTable, prmWkTbl As String, prmSql As String) As Boolean
 
         Dim tmpDb As New ClsReport(ClsGlobalData.REPORT_FILENAME)
         Dim dt As DateTime = DateTime.Parse(ComGetProcTime())
@@ -216,7 +214,7 @@ Public Class ClsPrintingProcess
 
             Try
                 ' SQL文の作成
-                .Execute("DELETE FROM " & WK_TBL)
+                .Execute("DELETE FROM " & prmWkTbl)
 
             Catch ex As Exception
                 Call ComWriteErrLog(ex)

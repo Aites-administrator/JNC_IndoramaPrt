@@ -18,7 +18,7 @@ Public Class Frm_IndoramaPrt
     Private InsFlg As Boolean = True
 
     ''' <summary>
-    ''' マスタMDBファイルパス
+    ''' 連番フラグ
     ''' </summary>
     Private Const REC_NO_FLG As Boolean = True
 
@@ -26,6 +26,36 @@ Public Class Frm_IndoramaPrt
     ''' マスタMDBファイルパス
     ''' </summary>
     Private Const MST_ACCESS_PATH As String = "D:\JNC\DAT\JISSEKI.mdb"
+
+    ''' <summary>
+    ''' バッグ連番名
+    ''' </summary>
+    Private Const BAG_REN_NAME As String = "BAG#"
+
+    ''' <summary>
+    ''' パレット連番名
+    ''' </summary>
+    Private Const PALLET_REN_NAME As String = "PALLET#"
+
+    ''' <summary>
+    ''' バッグワークテーブル名
+    ''' </summary>
+    Private Const BAG_WK_TBL As String = "T_BAG"
+
+    ''' <summary>
+    ''' パレットレポート名
+    ''' </summary>
+    Private Const BAG_REPORT_NAME As String = "R_BAG"
+
+    ''' <summary>
+    ''' パレットワークテーブル名
+    ''' </summary>
+    Private Const PALLET_WK_TBL As String = "T_PALLET"
+
+    ''' <summary>
+    ''' パレットワークテーブル名
+    ''' </summary>
+    Private Const PALLET_REPORT_NAME As String = "R_PALLET"
 
     Private InjiNenGappi As String = ""
 
@@ -82,7 +112,7 @@ Public Class Frm_IndoramaPrt
         '再発行データ取得処理
         tmpDt = GetTrnData()
 
-
+        '正常に再発行ﾃﾞｰﾀを取得
         If tmpDt.Rows.Count = 1 Then
 
             TxtSeisanDate.Text = tmpDt.Rows(0).Item("PRODUCT_DATE").ToString
@@ -93,19 +123,21 @@ Public Class Frm_IndoramaPrt
             TxtBag.Text = tmpDt.Rows(0).Item("BAG").ToString
             TxtFixNo.Text = tmpDt.Rows(0).Item("FIX_NO").ToString
             TxtRecNo.Text = tmpDt.Rows(0).Item("REC_NO").ToString
+            'チェックディジット計算
+            TxtCheckDigit.Text = AddCheckDigit(TxtFixNo.Text & TxtSeisanDate.Text & TxtRecNo.Text.PadLeft(6, "0"c))
 
             InsFlg = False
         End If
 
-        If RdoAuto.Checked Then
-            If tmpDt.Rows.Count = 0 Then
-                TxtBag.Text = GetRecNo().PadLeft(3, "0"c)
-                TxtRecNo.Text = GetRecNo(REC_NO_FLG).PadLeft(6, "0"c)
-            End If
+        'If RdoAuto.Checked Then
+        '再発行データ0件
+        If tmpDt.Rows.Count = 0 Then
+            '採番処理
+            NumberingProcess()
+            'TxtBag.Text = GetRecNo().PadLeft(3, "0"c)
+            'TxtRecNo.Text = GetRecNo(REC_NO_FLG).PadLeft(6, "0"c)
         End If
-
-        'チェックディジット計算
-        TxtCheckDigit.Text = AddCheckDigit(TxtFixNo.Text & TxtSeisanDate.Text & TxtRecNo.Text.PadLeft(6, "0"c))
+        'End If
 
     End Sub
 
@@ -118,19 +150,28 @@ Public Class Frm_IndoramaPrt
 
         Try
             '自動データ登録処理
-            If RdoAuto.Checked Then
-                If InsFlg Then
-                    InsertAutoData()
-                End If
+            If RdoAuto.Checked And InsFlg Then
+                InsertAutoData()
             End If
 
-            ' 印刷処理
-            Print()
+            ' Bagラベル印刷処理
+            If RdoManual.Checked And RdoBagLayout.Checked Then
+                BagPrint()
+            End If
+
+            ' Bagラベル印刷処理
+            If RdoManual.Checked And RdoPalletLayout.Checked Then
+                PalletPrint()
+            End If
 
             '自動データ登録処理
             If RdoAuto.Checked Then
-                TxtRecNo.Text = GetRecNo(REC_NO_FLG).PadLeft(6, "0"c)
-                TxtBag.Text = GetRecNo().PadLeft(3, "0"c)
+                '採番処理
+                NumberingProcess()
+                'TxtRecNo.Text = GetRecNo(REC_NO_FLG).PadLeft(6, "0"c)
+                'TxtBag.Text = GetRecNo().PadLeft(3, "0"c)
+                ''チェックディジット計算
+                'TxtCheckDigit.Text = AddCheckDigit(TxtFixNo.Text & TxtSeisanDate.Text & TxtRecNo.Text)
             End If
         Catch ex As Exception
             ComWriteErrLog(ex)
@@ -190,7 +231,7 @@ Public Class Frm_IndoramaPrt
                     InAllData = ""
                 End If
             Else
-
+                Jyuryo = 0
 
             End If
 
@@ -245,20 +286,31 @@ Public Class Frm_IndoramaPrt
         Try
             Select Case True
                 Case RdoAuto.Checked
+                    GrpLayout.Enabled = False
                     TxtQuantity.ReadOnly = False
-                    SerialPortsGet()
+                    TxtLotNo.BackColor = Color.White
+                    TxtBag.BackColor = Color.White
+                    TxtPallet.BackColor = SystemColors.Control
+                    TxtBag2.BackColor = SystemColors.Control
+
                     TxtRecNo.ReadOnly = True
+                    SerialPortsGet()
                     TxtRecNo.Text = GetRecNo(REC_NO_FLG).PadLeft(6, "0"c)
+
                     If Not String.IsNullOrWhiteSpace(TxtLotNo.Text) Then
                         TxtBag.Text = GetRecNo().PadLeft(3, "0"c)
                     End If
                 Case RdoManual.Checked
+                    GrpLayout.Enabled = True
+                    RdoBagLayout.Checked = False
+                    RdoBagLayout.Checked = True
+                    TxtLotNo.BackColor = Color.AliceBlue
+                    TxtRecNo.ReadOnly = False
+                    TxtRecNo.Text = ""
                     'TxtQuantity.ReadOnly = False
                     If SeriPort.IsOpen = True Then   'ポートオープン済み
                         SeriPort.Close()                         'ポートクローズ
                     End If
-                    TxtRecNo.ReadOnly = False
-                    TxtRecNo.Text = ""
             End Select
 
         Catch ex As Exception
@@ -267,13 +319,55 @@ Public Class Frm_IndoramaPrt
         End Try
     End Sub
 
+
+    Private Sub RdoLayout_CheckedChanged(sender As Object, e As EventArgs) Handles RdoBagLayout.CheckedChanged, RdoPalletLayout.CheckedChanged
+        Try
+
+            Select Case True
+                Case RdoBagLayout.Checked
+                    TxtBag.ReadOnly = False
+                    TxtBag2.ReadOnly = True
+                    TxtBag2.BackColor = SystemColors.Control
+                    TxtPallet.ReadOnly = True
+                    TxtPallet.BackColor = SystemColors.Control
+                    TxtSplice.ReadOnly = False
+                    TxtSplice.BackColor = Color.White
+                    If GrpLayout.Enabled Then
+                        TxtBag.BackColor = Color.AliceBlue
+                    End If
+                Case RdoPalletLayout.Checked
+                    TxtBag.ReadOnly = False
+                    TxtBag2.ReadOnly = False
+                    TxtBag2.BackColor = Color.White
+                    TxtPallet.ReadOnly = False
+                    TxtPallet.BackColor = Color.White
+                    TxtBag.BackColor = Color.White
+                    TxtBag.BackColor = SystemColors.Control
+                    TxtSplice.ReadOnly = True
+                    TxtSplice.BackColor = SystemColors.Control
+                    If GrpLayout.Enabled Then
+                        TxtPallet.BackColor = Color.AliceBlue
+                    End If
+
+            End Select
+
+            '印刷数初期設定
+            InitPrintCnt()
+
+        Catch ex As Exception
+            ComWriteErrLog(ex)
+            ComMessageBox(ex.Message, "接続確認", typMsgBox.MSG_WARNING, typMsgBoxButton.BUTTON_OK)
+        End Try
+    End Sub
+
+
     Private Sub TxtPrtCnt_Validated(sender As Object, e As EventArgs) Handles TxtPrtCnt.Validated
         If Not IsNumeric(TxtPrtCnt.Text) Then
-            TxtPrtCnt.Text = 2
+            InitPrintCnt()
         End If
 
         If TxtPrtCnt.Text = 0 Then
-            TxtPrtCnt.Text = 2
+            InitPrintCnt()
         End If
     End Sub
 
@@ -298,6 +392,38 @@ Public Class Frm_IndoramaPrt
     End Sub
 #End Region
 
+    ''' <summary>
+    ''' 採番処理
+    ''' </summary>
+    Private Sub InitPrintCnt()
+        Select Case True
+            Case RdoBagLayout.Checked
+                TxtPrtCnt.Text = 1
+            Case RdoPalletLayout.Checked
+                TxtPrtCnt.Text = 2
+            Case Else
+                TxtPrtCnt.Text = 2
+        End Select
+
+
+    End Sub
+
+    ''' <summary>
+    ''' 採番処理
+    ''' </summary>
+    Private Sub NumberingProcess()
+        If RdoAuto.Checked Then
+            If Not String.IsNullOrWhiteSpace(TxtLotNo.Text) Then
+                '連番の採番
+                TxtRecNo.Text = GetRecNo(REC_NO_FLG).PadLeft(6, "0"c)
+                'Bagの採番
+                TxtBag.Text = GetRecNo().PadLeft(3, "0"c)
+            End If
+        End If
+        'チェックディジット計算
+        TxtCheckDigit.Text = AddCheckDigit(TxtFixNo.Text & TxtSeisanDate.Text & TxtRecNo.Text)
+
+    End Sub
     'チェックディジット計算処理
     Private Function AddCheckDigit(prmText As String) As String
         Dim len As Integer = 0
@@ -379,26 +505,60 @@ Public Class Frm_IndoramaPrt
     End Sub
 
     ''' <summary>
-    ''' 印刷処理
+    ''' Bagラベル印刷処理
     ''' </summary>
-    Private Sub Print()
+    Private Sub BagPrint()
         Dim tmpInsData As New Dictionary(Of String, String)
 
         Try
             tmpInsData.Clear()
             tmpInsData.Add("SUPPLIER_PRODUCT", "'" & TxtLotNoEdaNo.Text & "'")
-                tmpInsData.Add("MRMS", "'" & TxtMrms.Text & "'")
+            tmpInsData.Add("MRMS", "'" & TxtMrms.Text & "'")
             tmpInsData.Add("PRODUCT_DATE", "'" & TxtSeisanDate.Text & "'")
-            tmpInsData.Add("PALLET_TYPE", "'" & TxtBag.Text & "'")
+            tmpInsData.Add("BAG", "'" & TxtBag.Text & "'")
             tmpInsData.Add("ITEM", "'" & TxtItemName.Text & "'")
             tmpInsData.Add("QUANTITY", "'" & TxtQuantity.Text & "'")
             tmpInsData.Add("LOT", "'" & TxtLotNo.Text & "'")
             tmpInsData.Add("BARCODE_SRC", "'" & "(00)" & TxtFixNo.Text & TxtSeisanDate.Text & TxtRecNo.Text.PadLeft(6, "0"c) & TxtCheckDigit.Text & "'")
             tmpInsData.Add("OUTCOUNT", "'" & TxtPrtCnt.Text & "'")
+            tmpInsData.Add("SPLICE", "'" & TxtSplice.Text & "'")
 
             Dim PrtCnt As Integer = Integer.Parse(TxtPrtCnt.Text)
             For i As Integer = 0 To PrtCnt - 1
-                PrintProcess(1, tmpInsData)
+                PrintProcess(BAG_WK_TBL, BAG_REPORT_NAME, 0, tmpInsData)
+            Next
+
+        Catch ex As Exception
+            Throw New Exception(ex.Message)
+        End Try
+
+
+    End Sub
+
+    ''' <summary>
+    ''' Palletラベル印刷処理
+    ''' </summary>
+    Private Sub PalletPrint()
+        Dim tmpInsData As New Dictionary(Of String, String)
+
+        Try
+            tmpInsData.Clear()
+            tmpInsData.Add("SUPPLIER_PRODUCT", "'" & TxtLotNoEdaNo.Text & "'")
+            tmpInsData.Add("MRMS", "'" & TxtMrms.Text & "'")
+            tmpInsData.Add("PRODUCT_DATE", "'" & TxtSeisanDate.Text & "'")
+            tmpInsData.Add("BAG", "'" & TxtBag.Text & "'")
+            tmpInsData.Add("ITEM", "'" & TxtItemName.Text & "'")
+            tmpInsData.Add("QUANTITY", "'" & TxtQuantity.Text & "'")
+            tmpInsData.Add("LOT", "'" & TxtLotNo.Text & "'")
+            tmpInsData.Add("BARCODE_SRC", "'" & "(00)" & TxtFixNo.Text & TxtSeisanDate.Text & TxtRecNo.Text.PadLeft(6, "0"c) & TxtCheckDigit.Text & "'")
+            tmpInsData.Add("OUTCOUNT", "'" & TxtPrtCnt.Text & "'")
+            tmpInsData.Add("BAG2", "'" & TxtBag2.Text & "'")
+            tmpInsData.Add("SPLICE", "'" & TxtSplice.Text & "'")
+            tmpInsData.Add("PALLET", "'" & TxtPallet.Text & "'")
+
+            Dim PrtCnt As Integer = Integer.Parse(TxtPrtCnt.Text)
+            For i As Integer = 0 To PrtCnt - 1
+                PrintProcess(PALLET_WK_TBL, PALLET_REPORT_NAME, 0, tmpInsData)
             Next
 
         Catch ex As Exception
@@ -427,8 +587,11 @@ Public Class Frm_IndoramaPrt
             tmpInsData.Add("QUANTITY", "'" & TxtQuantity.Text & "'")
             tmpInsData.Add("LOT", "'" & TxtLotNo.Text & "'")
             tmpInsData.Add("BAG", "'" & TxtBag.Text & "'")
+            tmpInsData.Add("BAG2", "'" & TxtBag2.Text & "'")
             tmpInsData.Add("FIX_NO", "'" & TxtFixNo.Text & "'")
             tmpInsData.Add("REC_NO", "'" & TxtRecNo.Text.PadLeft(6, "0"c) & "'")
+            tmpInsData.Add("PALLET", "'" & TxtPallet.Text & "'")
+            tmpInsData.Add("SPLICE", "'" & TxtSplice.Text & "'")
 
             tmpDb.Execute(SqlInsert("TRN_Data", tmpInsData))
 
@@ -492,6 +655,24 @@ Public Class Frm_IndoramaPrt
         Return tmpDt
     End Function
 
+
+    ''' <summary>
+    ''' 連番データ取得処理
+    ''' </summary>
+    Private Function GetRenData(prmRenName As String) As DataTable
+        Dim tmpDb As New ClsAccess(DATA_FILEPATH)
+        Dim tmpDt As New DataTable
+
+        Try
+            tmpDb.GetResult(tmpDt, SqlGetRenData(prmRenName))
+
+        Catch ex As Exception
+            Throw New Exception(ex.Message)
+        End Try
+
+        Return tmpDt
+    End Function
+
 #Region "SQL"
     ''' <summary>
     ''' 連番取得SQL
@@ -542,6 +723,32 @@ Public Class Frm_IndoramaPrt
         Return sql
 
     End Function
+
+    ''' <summary>
+    ''' 連番データ取得SQL
+    ''' <param name="prmRenNoName">連番名</param>>
+    ''' </summary>
+    Private Function SqlGetRenData(prmRenNoName As String) As String
+        Dim sql As String
+
+        sql = ""
+        sql += "SELECT  RenNo "
+        sql += " FROM DenNoTbl "
+        sql += " WHERE RenName = '" & prmRenNoName & "'"
+
+        ComWriteLog(sql, System.AppDomain.CurrentDomain.BaseDirectory & "sql" & ComGetProcYear() & ComGetProcMonth() & ".log")
+
+        Return sql
+
+    End Function
+
+
+    Private Sub Frm_IndoramaPrt_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        '連番の取得
+        MessageBox.Show((GetRenData(BAG_REN_NAME).Rows(0).Item("RenNo") + 1).ToString.PadLeft(6, "0"c))
+        MessageBox.Show((GetRenData(PALLET_REN_NAME).Rows(0).Item("RenNo") + 1).ToString.PadLeft(6, "0"c))
+    End Sub
 
 #End Region
 End Class

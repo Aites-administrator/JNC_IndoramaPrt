@@ -51,7 +51,16 @@ Partial Class Frm_IndoramaPrt
         Me.RdoAuto = New System.Windows.Forms.RadioButton()
         Me.RdoManual = New System.Windows.Forms.RadioButton()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.GrpLayout = New System.Windows.Forms.GroupBox()
+        Me.RdoPalletLayout = New System.Windows.Forms.RadioButton()
+        Me.RdoBagLayout = New System.Windows.Forms.RadioButton()
+        Me.TxtBag2 = New System.Windows.Forms.TextBox()
+        Me.TxtSplice = New System.Windows.Forms.TextBox()
+        Me.Label = New System.Windows.Forms.Label()
+        Me.TxtPallet = New System.Windows.Forms.TextBox()
+        Me.Label16 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
+        Me.GrpLayout.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -156,7 +165,7 @@ Partial Class Frm_IndoramaPrt
         '
         'TxtFixNo
         '
-        Me.TxtFixNo.Location = New System.Drawing.Point(603, 112)
+        Me.TxtFixNo.Location = New System.Drawing.Point(603, 160)
         Me.TxtFixNo.Margin = New System.Windows.Forms.Padding(5)
         Me.TxtFixNo.MaxLength = 5
         Me.TxtFixNo.Name = "TxtFixNo"
@@ -166,7 +175,7 @@ Partial Class Frm_IndoramaPrt
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(467, 115)
+        Me.Label6.Location = New System.Drawing.Point(467, 163)
         Me.Label6.Margin = New System.Windows.Forms.Padding(5, 0, 5, 0)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(85, 19)
@@ -175,7 +184,7 @@ Partial Class Frm_IndoramaPrt
         '
         'TxtRecNo
         '
-        Me.TxtRecNo.Location = New System.Drawing.Point(603, 159)
+        Me.TxtRecNo.Location = New System.Drawing.Point(603, 207)
         Me.TxtRecNo.Margin = New System.Windows.Forms.Padding(5)
         Me.TxtRecNo.MaxLength = 6
         Me.TxtRecNo.Name = "TxtRecNo"
@@ -186,7 +195,7 @@ Partial Class Frm_IndoramaPrt
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(467, 162)
+        Me.Label7.Location = New System.Drawing.Point(467, 210)
         Me.Label7.Margin = New System.Windows.Forms.Padding(5, 0, 5, 0)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(47, 19)
@@ -195,7 +204,7 @@ Partial Class Frm_IndoramaPrt
         '
         'TxtCheckDigit
         '
-        Me.TxtCheckDigit.Location = New System.Drawing.Point(603, 210)
+        Me.TxtCheckDigit.Location = New System.Drawing.Point(603, 258)
         Me.TxtCheckDigit.Margin = New System.Windows.Forms.Padding(5)
         Me.TxtCheckDigit.MaxLength = 1
         Me.TxtCheckDigit.Name = "TxtCheckDigit"
@@ -206,7 +215,7 @@ Partial Class Frm_IndoramaPrt
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(467, 210)
+        Me.Label8.Location = New System.Drawing.Point(467, 258)
         Me.Label8.Margin = New System.Windows.Forms.Padding(5, 0, 5, 0)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(126, 19)
@@ -275,11 +284,11 @@ Partial Class Frm_IndoramaPrt
         '
         'TxtBag
         '
-        Me.TxtBag.Location = New System.Drawing.Point(603, 56)
+        Me.TxtBag.Location = New System.Drawing.Point(603, 62)
         Me.TxtBag.Margin = New System.Windows.Forms.Padding(5)
         Me.TxtBag.MaxLength = 3
         Me.TxtBag.Name = "TxtBag"
-        Me.TxtBag.Size = New System.Drawing.Size(204, 26)
+        Me.TxtBag.Size = New System.Drawing.Size(92, 26)
         Me.TxtBag.TabIndex = 7
         '
         'Label12
@@ -345,11 +354,99 @@ Partial Class Frm_IndoramaPrt
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "印刷モード設定"
         '
+        'GrpLayout
+        '
+        Me.GrpLayout.Controls.Add(Me.RdoPalletLayout)
+        Me.GrpLayout.Controls.Add(Me.RdoBagLayout)
+        Me.GrpLayout.Location = New System.Drawing.Point(564, 7)
+        Me.GrpLayout.Name = "GrpLayout"
+        Me.GrpLayout.Size = New System.Drawing.Size(279, 50)
+        Me.GrpLayout.TabIndex = 30
+        Me.GrpLayout.TabStop = False
+        Me.GrpLayout.Text = "印刷レイアウト選択"
+        '
+        'RdoPalletLayout
+        '
+        Me.RdoPalletLayout.AutoSize = True
+        Me.RdoPalletLayout.Location = New System.Drawing.Point(122, 21)
+        Me.RdoPalletLayout.Name = "RdoPalletLayout"
+        Me.RdoPalletLayout.Size = New System.Drawing.Size(138, 23)
+        Me.RdoPalletLayout.TabIndex = 28
+        Me.RdoPalletLayout.Text = "PALLETラベル"
+        Me.RdoPalletLayout.UseVisualStyleBackColor = True
+        '
+        'RdoBagLayout
+        '
+        Me.RdoBagLayout.AutoSize = True
+        Me.RdoBagLayout.Checked = True
+        Me.RdoBagLayout.Location = New System.Drawing.Point(15, 21)
+        Me.RdoBagLayout.Name = "RdoBagLayout"
+        Me.RdoBagLayout.Size = New System.Drawing.Size(109, 23)
+        Me.RdoBagLayout.TabIndex = 27
+        Me.RdoBagLayout.TabStop = True
+        Me.RdoBagLayout.Text = "BAGラベル"
+        Me.RdoBagLayout.UseVisualStyleBackColor = True
+        '
+        'TxtBag2
+        '
+        Me.TxtBag2.BackColor = System.Drawing.SystemColors.Control
+        Me.TxtBag2.Location = New System.Drawing.Point(715, 62)
+        Me.TxtBag2.Margin = New System.Windows.Forms.Padding(5)
+        Me.TxtBag2.MaxLength = 3
+        Me.TxtBag2.Name = "TxtBag2"
+        Me.TxtBag2.Size = New System.Drawing.Size(92, 26)
+        Me.TxtBag2.TabIndex = 31
+        '
+        'TxtSplice
+        '
+        Me.TxtSplice.Location = New System.Drawing.Point(215, 299)
+        Me.TxtSplice.Margin = New System.Windows.Forms.Padding(5)
+        Me.TxtSplice.MaxLength = 3
+        Me.TxtSplice.Name = "TxtSplice"
+        Me.TxtSplice.Size = New System.Drawing.Size(204, 26)
+        Me.TxtSplice.TabIndex = 33
+        '
+        'Label
+        '
+        Me.Label.AutoSize = True
+        Me.Label.Location = New System.Drawing.Point(22, 302)
+        Me.Label.Margin = New System.Windows.Forms.Padding(5, 0, 5, 0)
+        Me.Label.Name = "Label"
+        Me.Label.Size = New System.Drawing.Size(47, 19)
+        Me.Label.TabIndex = 34
+        Me.Label.Text = "継目"
+        '
+        'TxtPallet
+        '
+        Me.TxtPallet.BackColor = System.Drawing.SystemColors.Control
+        Me.TxtPallet.Location = New System.Drawing.Point(603, 115)
+        Me.TxtPallet.Margin = New System.Windows.Forms.Padding(5)
+        Me.TxtPallet.MaxLength = 3
+        Me.TxtPallet.Name = "TxtPallet"
+        Me.TxtPallet.Size = New System.Drawing.Size(204, 26)
+        Me.TxtPallet.TabIndex = 35
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(467, 118)
+        Me.Label16.Margin = New System.Windows.Forms.Padding(5, 0, 5, 0)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(85, 19)
+        Me.Label16.TabIndex = 36
+        Me.Label16.Text = "PALLET#"
+        '
         'Frm_IndoramaPrt
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(10.0!, 19.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(857, 467)
+        Me.Controls.Add(Me.TxtPallet)
+        Me.Controls.Add(Me.Label16)
+        Me.Controls.Add(Me.TxtSplice)
+        Me.Controls.Add(Me.Label)
+        Me.Controls.Add(Me.TxtBag2)
+        Me.Controls.Add(Me.GrpLayout)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Label14)
         Me.Controls.Add(Me.Label13)
@@ -384,6 +481,8 @@ Partial Class Frm_IndoramaPrt
         Me.Text = "印刷設定画面"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GrpLayout.ResumeLayout(False)
+        Me.GrpLayout.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -418,4 +517,12 @@ Partial Class Frm_IndoramaPrt
     Friend WithEvents RdoAuto As RadioButton
     Friend WithEvents RdoManual As RadioButton
     Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents GrpLayout As GroupBox
+    Friend WithEvents RdoPalletLayout As RadioButton
+    Friend WithEvents RdoBagLayout As RadioButton
+    Friend WithEvents TxtBag2 As TextBox
+    Friend WithEvents TxtSplice As TextBox
+    Friend WithEvents Label As Label
+    Friend WithEvents TxtPallet As TextBox
+    Friend WithEvents Label16 As Label
 End Class
