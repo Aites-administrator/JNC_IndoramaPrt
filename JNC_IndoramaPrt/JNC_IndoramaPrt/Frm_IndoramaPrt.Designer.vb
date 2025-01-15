@@ -59,6 +59,7 @@ Partial Class Frm_IndoramaPrt
         Me.Label = New System.Windows.Forms.Label()
         Me.TxtPallet = New System.Windows.Forms.TextBox()
         Me.Label16 = New System.Windows.Forms.Label()
+        Me.LblHis = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.GrpLayout.SuspendLayout()
         Me.SuspendLayout()
@@ -131,7 +132,7 @@ Partial Class Frm_IndoramaPrt
         Me.TxtLotNo.MaxLength = 11
         Me.TxtLotNo.Name = "TxtLotNo"
         Me.TxtLotNo.Size = New System.Drawing.Size(204, 26)
-        Me.TxtLotNo.TabIndex = 6
+        Me.TxtLotNo.TabIndex = 5
         '
         'Label4
         '
@@ -151,7 +152,7 @@ Partial Class Frm_IndoramaPrt
         Me.TxtQuantity.Name = "TxtQuantity"
         Me.TxtQuantity.ReadOnly = True
         Me.TxtQuantity.Size = New System.Drawing.Size(204, 26)
-        Me.TxtQuantity.TabIndex = 5
+        Me.TxtQuantity.TabIndex = 4
         '
         'Label5
         '
@@ -167,10 +168,10 @@ Partial Class Frm_IndoramaPrt
         '
         Me.TxtFixNo.Location = New System.Drawing.Point(603, 160)
         Me.TxtFixNo.Margin = New System.Windows.Forms.Padding(5)
-        Me.TxtFixNo.MaxLength = 5
+        Me.TxtFixNo.MaxLength = 8
         Me.TxtFixNo.Name = "TxtFixNo"
         Me.TxtFixNo.Size = New System.Drawing.Size(204, 26)
-        Me.TxtFixNo.TabIndex = 8
+        Me.TxtFixNo.TabIndex = 10
         '
         'Label6
         '
@@ -190,7 +191,7 @@ Partial Class Frm_IndoramaPrt
         Me.TxtRecNo.Name = "TxtRecNo"
         Me.TxtRecNo.ReadOnly = True
         Me.TxtRecNo.Size = New System.Drawing.Size(204, 26)
-        Me.TxtRecNo.TabIndex = 9
+        Me.TxtRecNo.TabIndex = 11
         '
         'Label7
         '
@@ -210,7 +211,7 @@ Partial Class Frm_IndoramaPrt
         Me.TxtCheckDigit.Name = "TxtCheckDigit"
         Me.TxtCheckDigit.ReadOnly = True
         Me.TxtCheckDigit.Size = New System.Drawing.Size(204, 26)
-        Me.TxtCheckDigit.TabIndex = 10
+        Me.TxtCheckDigit.TabIndex = 12
         '
         'Label8
         '
@@ -229,7 +230,7 @@ Partial Class Frm_IndoramaPrt
         Me.TxtPrtCnt.MaxLength = 1
         Me.TxtPrtCnt.Name = "TxtPrtCnt"
         Me.TxtPrtCnt.Size = New System.Drawing.Size(54, 26)
-        Me.TxtPrtCnt.TabIndex = 11
+        Me.TxtPrtCnt.TabIndex = 13
         Me.TxtPrtCnt.Text = "2"
         '
         'Label9
@@ -248,7 +249,7 @@ Partial Class Frm_IndoramaPrt
         Me.BtnPrint.Margin = New System.Windows.Forms.Padding(5)
         Me.BtnPrint.Name = "BtnPrint"
         Me.BtnPrint.Size = New System.Drawing.Size(157, 70)
-        Me.BtnPrint.TabIndex = 18
+        Me.BtnPrint.TabIndex = 14
         Me.BtnPrint.Text = "印刷"
         Me.BtnPrint.UseVisualStyleBackColor = True
         '
@@ -270,7 +271,7 @@ Partial Class Frm_IndoramaPrt
         Me.TxtMrms.MaxLength = 8
         Me.TxtMrms.Name = "TxtMrms"
         Me.TxtMrms.Size = New System.Drawing.Size(204, 26)
-        Me.TxtMrms.TabIndex = 4
+        Me.TxtMrms.TabIndex = 3
         '
         'Label11
         '
@@ -350,7 +351,7 @@ Partial Class Frm_IndoramaPrt
         Me.GroupBox1.Location = New System.Drawing.Point(246, 7)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(173, 50)
-        Me.GroupBox1.TabIndex = 29
+        Me.GroupBox1.TabIndex = 15
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "印刷モード設定"
         '
@@ -361,7 +362,7 @@ Partial Class Frm_IndoramaPrt
         Me.GrpLayout.Location = New System.Drawing.Point(564, 7)
         Me.GrpLayout.Name = "GrpLayout"
         Me.GrpLayout.Size = New System.Drawing.Size(279, 50)
-        Me.GrpLayout.TabIndex = 30
+        Me.GrpLayout.TabIndex = 16
         Me.GrpLayout.TabStop = False
         Me.GrpLayout.Text = "印刷レイアウト選択"
         '
@@ -395,16 +396,16 @@ Partial Class Frm_IndoramaPrt
         Me.TxtBag2.MaxLength = 3
         Me.TxtBag2.Name = "TxtBag2"
         Me.TxtBag2.Size = New System.Drawing.Size(92, 26)
-        Me.TxtBag2.TabIndex = 31
+        Me.TxtBag2.TabIndex = 8
         '
         'TxtSplice
         '
         Me.TxtSplice.Location = New System.Drawing.Point(215, 299)
         Me.TxtSplice.Margin = New System.Windows.Forms.Padding(5)
-        Me.TxtSplice.MaxLength = 3
+        Me.TxtSplice.MaxLength = 2
         Me.TxtSplice.Name = "TxtSplice"
         Me.TxtSplice.Size = New System.Drawing.Size(204, 26)
-        Me.TxtSplice.TabIndex = 33
+        Me.TxtSplice.TabIndex = 6
         '
         'Label
         '
@@ -424,7 +425,7 @@ Partial Class Frm_IndoramaPrt
         Me.TxtPallet.MaxLength = 3
         Me.TxtPallet.Name = "TxtPallet"
         Me.TxtPallet.Size = New System.Drawing.Size(204, 26)
-        Me.TxtPallet.TabIndex = 35
+        Me.TxtPallet.TabIndex = 9
         '
         'Label16
         '
@@ -436,11 +437,23 @@ Partial Class Frm_IndoramaPrt
         Me.Label16.TabIndex = 36
         Me.Label16.Text = "PALLET#"
         '
+        'LblHis
+        '
+        Me.LblHis.AutoSize = True
+        Me.LblHis.Font = New System.Drawing.Font("MS UI Gothic", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.LblHis.ForeColor = System.Drawing.Color.Red
+        Me.LblHis.Location = New System.Drawing.Point(428, 262)
+        Me.LblHis.Margin = New System.Windows.Forms.Padding(5, 0, 5, 0)
+        Me.LblHis.Name = "LblHis"
+        Me.LblHis.Size = New System.Drawing.Size(0, 19)
+        Me.LblHis.TabIndex = 37
+        '
         'Frm_IndoramaPrt
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(10.0!, 19.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(857, 467)
+        Me.Controls.Add(Me.LblHis)
         Me.Controls.Add(Me.TxtPallet)
         Me.Controls.Add(Me.Label16)
         Me.Controls.Add(Me.TxtSplice)
@@ -525,4 +538,5 @@ Partial Class Frm_IndoramaPrt
     Friend WithEvents Label As Label
     Friend WithEvents TxtPallet As TextBox
     Friend WithEvents Label16 As Label
+    Friend WithEvents LblHis As Label
 End Class
