@@ -60,6 +60,7 @@ Partial Class Frm_IndoramaPrt
         Me.TxtPallet = New System.Windows.Forms.TextBox()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.LblHis = New System.Windows.Forms.Label()
+        Me.ChkManuPriority = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GrpLayout.SuspendLayout()
         Me.SuspendLayout()
@@ -448,11 +449,23 @@ Partial Class Frm_IndoramaPrt
         Me.LblHis.Size = New System.Drawing.Size(0, 19)
         Me.LblHis.TabIndex = 37
         '
+        'ChkManuPriority
+        '
+        Me.ChkManuPriority.AutoSize = True
+        Me.ChkManuPriority.Font = New System.Drawing.Font("MS UI Gothic", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.ChkManuPriority.Location = New System.Drawing.Point(116, 215)
+        Me.ChkManuPriority.Name = "ChkManuPriority"
+        Me.ChkManuPriority.Size = New System.Drawing.Size(91, 17)
+        Me.ChkManuPriority.TabIndex = 38
+        Me.ChkManuPriority.Text = "手入力優先"
+        Me.ChkManuPriority.UseVisualStyleBackColor = True
+        '
         'Frm_IndoramaPrt
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(10.0!, 19.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(857, 467)
+        Me.Controls.Add(Me.ChkManuPriority)
         Me.Controls.Add(Me.LblHis)
         Me.Controls.Add(Me.TxtPallet)
         Me.Controls.Add(Me.Label16)
@@ -539,4 +552,5 @@ Partial Class Frm_IndoramaPrt
     Friend WithEvents TxtPallet As TextBox
     Friend WithEvents Label16 As Label
     Friend WithEvents LblHis As Label
+    Friend WithEvents ChkManuPriority As CheckBox
 End Class
